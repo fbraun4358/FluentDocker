@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -404,6 +404,22 @@ namespace Ductus.FluentDocker.Tests.ServiceTests
                                                      && JsonConvert.SerializeObject(c) == JsonConvert.SerializeObject(container)));
         Assert.IsNotNull(result.SingleOrDefault(c => c.Id == container2.Id
                                                      && JsonConvert.SerializeObject(c) == JsonConvert.SerializeObject(container2)));
+      }
+    }
+
+    [TestMethod]
+    public void GetLogsReturnsLogs()
+    {
+      var message = "Hello World!";
+
+      using (var container = _host.Create("alpine:latest", false, command: $"echo {message}"))
+      {
+        container.Start();
+
+        var logs = container.GetLogs();
+
+        Assert.AreEqual(1, logs.Count);
+        Assert.AreEqual(message, logs[0]);
       }
     }
   }

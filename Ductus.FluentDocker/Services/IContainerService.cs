@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Ductus.FluentDocker.Model.Common;
 using Ductus.FluentDocker.Model.Containers;
@@ -60,6 +60,18 @@ namespace Ductus.FluentDocker.Services
     ///   This is not cached, thus it will go to the docker daemon each time.
     /// </remarks>
     Container GetConfiguration(bool fresh = false);
+
+    /// <summary>
+    ///   Gets the logs from the docker host for this container. This is equivolent to calling `docker logs [options] [ContainerId]`
+    /// </summary>
+    /// <param name="showTimeStamps">Show the timestamps of the log messages</param>
+    /// <param name="since">The limit for the earliest log message</param>
+    /// <param name="numLines">The maximum number of likes to return</param>
+    /// <param name="millisTimeout">The total timeout time to wait for a response</param>
+    /// <remarks>
+    ///   This is not cached, thus it will go to the docker daemon each time.
+    /// </remarks>
+    IList<string> GetLogs(bool showTimeStamps = false, DateTime? since = null, int? numLines = null, int millisTimeout = 5000);
 
     /// <summary>
     ///   Overridden to handle fluent access.

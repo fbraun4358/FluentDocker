@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ductus.FluentDocker.Commands;
 using Ductus.FluentDocker.Common;
+using Ductus.FluentDocker.Extensions;
 using Ductus.FluentDocker.Model.Common;
 using Ductus.FluentDocker.Model.Containers;
 
@@ -85,6 +86,16 @@ namespace Ductus.FluentDocker.Services.Impl
 
       _containerConfigCache = DockerHost.InspectContainer(Id, Certificates).Data;
       return _containerConfigCache;
+    }
+
+    public IList<string> GetLogs(bool showTimeStamps = false, DateTime? since = null, int? numLines = null, int millisTimeout = 5000)
+    {
+      return DockerHost.Logs(Id,
+        showTimeStamps:showTimeStamps,
+        since: since,
+        numLines: numLines,
+        certificates: Certificates)
+        .ReadToEnd(millisTimeout);
     }
 
     public ICertificatePaths Certificates { get; }
